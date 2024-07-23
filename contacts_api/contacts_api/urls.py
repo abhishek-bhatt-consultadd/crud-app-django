@@ -27,13 +27,15 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from contacts.views import CategoryViewSet, ContactViewSet
+from contacts.views import CategoryViewSet, ContactViewSet, SignUpView, LoginView
 
 router = DefaultRouter()
-router.register('contacts', ContactViewSet)
-router.register('categories', CategoryViewSet)
+router.register(r'contacts', ContactViewSet)
+router.register(r'categories', CategoryViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('signup/', SignUpView.as_view(), name='signup'),
+    path('login/', LoginView.as_view(), name='login'),
 ]
