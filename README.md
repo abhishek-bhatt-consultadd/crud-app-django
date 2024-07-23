@@ -64,14 +64,26 @@ python manage.py migrate
 python manage.py runserver
 You can now access the application at http://127.0.0.1:8000/.
 ```
-7. **Run test**
 
-Pytest is installed in the application for testing the application and is recommended by python. To run the test cases run this command in the root of the folder
+## Testing
+To run tests and check coverage Pytest is installed in the application for testing the application and is recommended by python. To run the test cases run this command in the root of the folder
 
+- Install Testing Dependencies:
+
+```
+pip install pytest pytest-django
+```
+
+- Run Tests:
 ```
 cd contactsApiMySql
 cd contacts_api
 pytest
+```
+
+- Check Test Coverage:
+```
+pytest --cov
 ```
 
 ## API Documentation
@@ -182,4 +194,19 @@ Desc: Deletes a specific contact by ID.
 Request and Response Formats
 Request Format: JSON
 Response Format: JSON
+
+### Project Structure
+`contacts/`: Contains the Django app for contacts management.
+
+models.py: Defines the Item and Supplier models.
+views.py: Contains API views for items and suppliers.
+serializers.py: Serializers for the models.
+permissions.py: permissions for users and roles
+utils.py: Utility functions for JWT creation and decoding
+
+`contacts_api/`: Project settings and configuration.
+
+settings.py: Configuration settings.
+urls.py: Project-wide URL routing.
+
 
