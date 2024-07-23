@@ -107,6 +107,8 @@ Desc: Registers a new user. The request body should include:
 }
 ```
 
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/b5dc6409-5f99-46b8-8248-a1d587fd7a95">
+
 - Log In
 
 POST /login/
@@ -135,6 +137,9 @@ On error:
 }
 ```
 
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/d854bbec-18d6-492d-8942-a8aff0f4a7bc">
+
+
 ### Crud APIs
 
 These api needs authenticated users for performing the crud operations. After login use the token received from login in header of other APIs.
@@ -148,6 +153,8 @@ Authorization : Bearer <Token>
 GET /contacts/
 
 Desc: Retrieves a list of all contacts.
+
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/59c3c3eb-bcce-4852-a641-011306aa5d79">
 
 - Create Contact
 
@@ -164,11 +171,16 @@ Desc: Creates a new contact. The request body should include:
 }
 ```
 
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/ea48582c-187d-4bb7-969e-15c998168166">
+
+
 - Retrieve Contact
 
 GET /contacts/{id}/
 
 Desc: Retrieves a specific contact by ID.
+
+<img width="1000" alt="image" src="https://github.com/user-attachments/assets/55959a73-8381-4877-bdfb-54096afd42ae">
 
 - Update Contact
 
@@ -185,11 +197,16 @@ Desc: Updates an existing contact. The request body should include:
 }
 ```
 
+<img width="837" alt="image" src="https://github.com/user-attachments/assets/a7048e7c-fd1f-4f5a-b2a4-f400bd16dccf">
+
 - Delete Contact
 
 DELETE /contacts/{id}/
 
 Desc: Deletes a specific contact by ID.
+
+<img width="831" alt="image" src="https://github.com/user-attachments/assets/962547d7-601a-440d-b20f-abfbefb0dcdc">
+
 
 Request and Response Formats
 Request Format: JSON
