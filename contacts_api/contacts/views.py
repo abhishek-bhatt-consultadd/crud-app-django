@@ -1,31 +1,24 @@
-from rest_framework import viewsets
-from .models import Contact, Category
-from .serialisers import ContactSerializer, CategorySerializer, UserSerializer, LoginSerializer
-from rest_framework import generics, status, serializers
+from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-from django.contrib.auth.models import User
-from .utils import create_jwt, decode_jwt
-from .permissions import IsAuthenticated
+from .models import Contact, Category, CustomUser
+from .serialisers import ContactSerializer, CategorySerializer, UserSerializer, LoginSerializer
+from .utils import create_jwt
+from .permissions import IsAuthenticated, IsAdminOrReadOnly
+from rest_framework.exceptions import AuthenticationFailed
 
-
-class ContactViewSet(viewsets.ModelViewSet):  
+class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        if serializer.validated_data['name'] not in ['Family', 'Friends', 'Office']:
-            raise serializers.ValidationError("Category name must be one of 'Family', 'Friends', or 'Office'.")
-        serializer.save()
+    permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
 
 class SignUpView(generics.CreateAPIView):
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
@@ -50,5 +43,7 @@ class LoginView(generics.GenericAPIView):
             user = serializer.validated_data
             token = create_jwt(user)
             return Response({"token": token}, status=status.HTTP_200_OK)
+        except AuthenticationFailed:
+            return Response({"error": "Incorrect Credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

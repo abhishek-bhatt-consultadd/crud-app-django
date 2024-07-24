@@ -47,6 +47,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 
+AUTH_USER_MODEL="contacts.CustomUser"
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -54,8 +56,8 @@ MIDDLEWARE = [
     #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'contacts_api.middleware.JWTAuthenticationMiddleware',
-    'contacts_api.middleware.DisableCSRFMiddleware',
+    'contacts.middleware.JWTAuthenticationMiddleware',
+    'contacts.middleware.DisableCSRFMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 

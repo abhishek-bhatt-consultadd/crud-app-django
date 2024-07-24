@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 class Category(models.Model):
     CATEGORY_CHOICES = [
@@ -16,7 +17,15 @@ class Contact(models.Model):
     phone_no = models.CharField(max_length=200, unique=True, blank=False)
     email = models.EmailField(unique=True, blank=False)
     address = models.TextField(blank=True)
-    category = models.ForeignKey(Category, related_name='contacts', on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(Category, related_name='contacts', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
+    
+class CustomUser(AbstractUser):
+    ROLE_CHOICES = (
+        ('admin', 'Admin'),
+        ('user', 'User'),
+    )
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
+

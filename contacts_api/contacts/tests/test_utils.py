@@ -1,12 +1,13 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
+
 from contacts.utils import create_jwt, decode_jwt
 from datetime import datetime, timedelta
+from contacts.models import CustomUser
 
 class JWTTests(TestCase):
     
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.user = CustomUser.objects.create_user(username='testuser', password='testpassword')
 
     def test_jwt_creation_and_decoding(self):
         token = create_jwt(self.user)
