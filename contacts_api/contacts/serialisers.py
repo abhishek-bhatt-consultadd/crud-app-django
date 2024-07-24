@@ -9,6 +9,8 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = '__all__'  # Include all fields
 
 class CategorySerializer(serializers.ModelSerializer):
+    contacts = ContactSerializer(many=True, read_only=True)  # Include related contacts
+
     class Meta:
         model = Category
         fields = '__all__'  # Include all fields
