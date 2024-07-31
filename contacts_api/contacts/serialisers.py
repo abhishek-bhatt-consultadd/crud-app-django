@@ -12,8 +12,6 @@ class ContactSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CategorySerializer(serializers.ModelSerializer):
-    contacts = ContactSerializer(many=True, read_only=True)
-
     class Meta:
         model = Category
         fields = '__all__'
@@ -21,14 +19,13 @@ class CategorySerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'password', 'role')
+        fields = ('id', 'username', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = CustomUser.objects.create_user(
             username=validated_data['username'],
             password=validated_data['password'],
-            role=validated_data['role']
         )
         return user
 

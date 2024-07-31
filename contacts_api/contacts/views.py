@@ -6,6 +6,7 @@ from .serialisers import ContactSerializer, CategorySerializer, UserSerializer, 
 from .utils import create_jwt
 from .permissions import IsAuthenticated, IsAdminOrReadOnly
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.decorators import action
 
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
@@ -16,6 +17,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
+
+    @action(detail=True, methods=['get'])
+    def contacts(self, request, pk=None):
+        category = self.get_object()
+        contacts = category.contacts.all()
+        serializer = ContactSerializer(contacts, many=True)
+        return Response(serializer.data)
+
 
 class SignUpView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()

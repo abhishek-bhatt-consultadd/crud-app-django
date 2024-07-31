@@ -87,3 +87,46 @@ def test_create_contact_with_invalid_data():
     }
     response = client.post(reverse('contact-list'), data, format='json')
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+@pytest.mark.django_db
+def test_get_contacts_by_category():
+    client = APIClient()
+    category = Category.objects.create(name='Office')
+    contact1 = Contact.objects.create(name='John Doe', phone_no='1234567890', email='john@example.com', category=category)
+    contact2 = Contact.objects.create(name='Jane Doe', phone_no='0987654321', email='jane@example.com', category=category)
+
+
+    user = CustomUser.objects.create_user(username='admin', password='password', role='admin')
+    client.force_authenticate(user=user)
+
+    url = reverse('category-contacts', kwargs={'pk': category.id})
+    response = client.get(url)
+    
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 2
+    assert response.data[0]['name'] == contact1.name
+    assert response.data[1]['name'] == contact2.name
+
+@pytest.mark.django_db
+def test_get_contacts_by_invalid_category():
+    client = APIClient()
+    user = CustomUser.objects.create_user(username='admin', password='password', role='user')
+    client.force_authenticate(user=user)
+
+    url = reverse('category-contacts', kwargs={'pk': 999})
+    response = client.get(url)
+    
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+@pytest.mark.django_db
+def test_get_contacts_by_category_no_contacts():
+    client = APIClient()
+    user = CustomUser.objects.create_user(username='admin', password='password', role='user')
+    client.force_authenticate(user=user)
+    category = Category.objects.create(name='Friends')
+
+    url = reverse('category-contacts', kwargs={'pk': category.id})
+    response = client.get(url)
+    
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 0
