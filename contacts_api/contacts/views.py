@@ -7,11 +7,16 @@ from .utils import create_jwt
 from .permissions import IsAuthenticated, IsAdminOrReadOnly
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.decorators import action
+import logging
+
+
+logger = logging.getLogger('django')
 
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
     permission_classes = [IsAuthenticated, IsAdminOrReadOnly]
+    
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -38,6 +43,7 @@ class SignUpView(generics.CreateAPIView):
             user = serializer.save()
             token = create_jwt(user)
             return Response({"token": token}, status=status.HTTP_201_CREATED)
+
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -53,6 +59,8 @@ class LoginView(generics.GenericAPIView):
             token = create_jwt(user)
             return Response({"token": token}, status=status.HTTP_200_OK)
         except AuthenticationFailed:
+            logger.error('Incorrect credentials', serializer)
             return Response({"error": "Incorrect Credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
